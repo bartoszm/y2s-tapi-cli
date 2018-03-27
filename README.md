@@ -9,6 +9,9 @@ Contact:
 
 
 ### How do I get set up? ###
+First you need to build https://github.com/bartoszm/yang2swagger.
+Then you simply run:
+``mvn clean install``
 
 ### Command-line Execution ###
 There are two CLI tools ``Generator`` and ``Converter``. ``Generator`` allows for generating Swagger from YANG modules thus it is similar to original 
