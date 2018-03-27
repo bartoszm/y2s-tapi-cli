@@ -17,10 +17,14 @@ Then you simply run:
 There are two CLI tools ``Generator`` and ``Converter``. ``Generator`` allows for generating Swagger from YANG modules thus it is similar to original 
 https://github.com/bartoszm/yang2swagger CLI generator. However, the pruning mechanism was configured to reduce number of path generated for TAPI modules.
 In addition extra parameters were added.
-``Converter`` can convert _any_ Swagger definition. What it does it flatens hierarchy to allow for using default code generators 
-(these generators do not support complex allOf structures). 
+``Converter`` can convert _any_ Swagger definition. What it does it flatens hierarchy in the input Swagger. 
 
-For example:
+#### Hierarchy flattening ####
+Swagger allows combining and extending model definitions using the ``allOf`` property of JSON Schema, in effect offering model composition. allOf takes in an array of object definitions that are validated independently but together compose a single object.
+However most of the default code generators do not handle definitions that contain more than one simple model and a single reference.
+
+To allow TAPI swagger definition to be consumed by default code generator we need to flatten data model, for example:
+
 ```
   tapi.connectivity.deleteconnectivityservice.output.Service:
     allOf:
@@ -100,10 +104,10 @@ tapi.connectivity.deleteconnectivityservice.output.Service:
           
           [... CUT ...]
 ```
-In other words properties from most of the referenced models got unpacked.    
-
-
+In other words properties from most of the referenced models got unpacked to definition using it.    
 You can directly generate swagger with simple hierarch using ``-simplify-hierarchy`` CLI argument.
+
+#### Usage ####
 You can easily run ```Generator``` from the command-line:
 ```
  java -cp yang2swagger-tapi-cli-1.0-SNAPSHOT-cli.jar com.amartus.y2s.Generator --help
