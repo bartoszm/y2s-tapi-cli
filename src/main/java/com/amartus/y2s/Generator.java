@@ -11,10 +11,9 @@ package com.amartus.y2s;
 
 import com.mrv.yangtools.codegen.SwaggerGenerator;
 import com.mrv.yangtools.codegen.impl.path.rfc8040.PathHandlerBuilder;
-import com.mrv.yangtools.codegen.impl.postprocessor.PathPrunner;
-import com.mrv.yangtools.codegen.impl.postprocessor.RemoveUnusedDefinitions;
-import com.mrv.yangtools.codegen.impl.postprocessor.SingleParentInheritenceModel;
+import com.mrv.yangtools.codegen.impl.postprocessor.*;
 import com.mrv.yangtools.common.ContextHelper;
+import io.swagger.models.auth.BasicAuthDefinition;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -68,8 +67,14 @@ public class Generator {
     @Option(name = "-use-namespaces", usage="Use namespaces in resource URI")
     public boolean useNamespaces = false;
 
+    @Option(name = "-authentication", usage="Authentication definition")
+    public AuthenticationMechanism authenticationMechanism = AuthenticationMechanism.NONE;
+
     OutputStream out = System.out;
 
+    public enum AuthenticationMechanism {
+        BASIC, NONE
+    }
 
     public enum ElementType {
         DATA, RPC, DATA_AND_RPC;
@@ -118,7 +123,12 @@ public class Generator {
                 .format(outputFormat).consumes(contentType).produces(contentType)
                 .host("localhost:1234").elements(map(elementType))
                 .pathHandler(pathHandler)
-                .appendPostProcessor(new PathPrunner("/operations").withType("tapi.common.GlobalClass"));
+                .appendPostProcessor(new PathPrunner("/operations").withType("tapi.common.GlobalClass"))
+                .appendPostProcessor(new CollapseTypes());
+
+        if(AuthenticationMechanism.BASIC.equals(authenticationMechanism)) {
+            generator.appendPostProcessor(new AddSecurityDefinitions().withSecurityDefinition("api_sec", new BasicAuthDefinition()));
+        }
 
         if(simplified) {
             generator.appendPostProcessor(new SingleParentInheritenceModel());
