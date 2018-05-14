@@ -17,7 +17,7 @@ Then you simply run:
 There are two CLI tools ``Generator`` and ``Converter``. ``Generator`` allows for generating Swagger from YANG modules thus it is similar to original 
 https://github.com/bartoszm/yang2swagger CLI generator. However, the pruning mechanism was configured to reduce number of path generated for TAPI modules.
 In addition extra parameters were added.
-``Converter`` can convert _any_ Swagger definition. What it does it flatens hierarchy in the input Swagger. 
+``Converter`` can convert _any_ Swagger definition. What it does it flattens hierarchy in the input Swagger. 
 
 #### Hierarchy flattening ####
 Swagger allows combining and extending model definitions using the ``allOf`` property of JSON Schema, in effect offering model composition. allOf takes in an array of object definitions that are validated independently but together compose a single object.
@@ -110,11 +110,13 @@ You can directly generate swagger with simple hierarch using ``-simplify-hierarc
 #### Usage ####
 You can easily run ```Generator``` from the command-line:
 ```
- java -cp yang2swagger-tapi-cli-1.0-SNAPSHOT-cli.jar com.amartus.y2s.Generator --help
+ java -cp yang2swagger-tapi-cli-1.1-cli.jar com.amartus.y2s.Generator --help
  module ...                            : List of YANG module names to generate
                                          in swagger output
  -api-version file                     : Version of api generated - default 1.0
                                          (default: 1.0)
+ -authentication [BASIC | NONE]        : Authentication definition (default:
+                                         NONE)
  -content-type VAL                     : Content type the API generates /
                                          consumes - default application/yang-dat
                                          a+json (default: application/yang-data+
@@ -142,14 +144,14 @@ You can easily run ```Generator``` from the command-line:
 
 For example:
 ```
-java -cp yang2swagger-tapi-cli-1.0-SNAPSHOT-cli.jar com.amartus.y2s.Generator -yang-dir yang -use-namespaces -elements RPC -output test.yaml
+java -cp yang2swagger-tapi-cli-1.1-cli.jar com.amartus.y2s.Generator -yang-dir yang -use-namespaces -elements RPC -output test.yaml
 ```
 
 To run ``Converter``:
 
 
 ```
-java -cp yang2swagger-tapi-cli-1.0-SNAPSHOT-cli.jar com.amartus.y2s.Converter  --help
+java -cp yang2swagger-tapi-cli-1.1-cli.jar com.amartus.y2s.Converter  --help
  -input file  : File with original swagger, containing the input - defaults to
                 stdin (default: )
  -output file : File to generate, containing the output - defaults to stdout
