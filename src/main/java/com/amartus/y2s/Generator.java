@@ -70,6 +70,9 @@ public class Generator {
     @Option(name = "-authentication", usage="Authentication definition")
     public AuthenticationMechanism authenticationMechanism = AuthenticationMechanism.NONE;
 
+    @Option(name = "-fullCrud", usage="If the flag is set to false path are generated for GET operations only. Default true")
+    public boolean fullCrud = true;
+
     OutputStream out = System.out;
 
     public enum AuthenticationMechanism {
@@ -113,7 +116,11 @@ public class Generator {
                 .collect(Collectors.toSet());
 
 
-        PathHandlerBuilder pathHandler = new PathHandlerBuilder().withoutFullCrud();
+        PathHandlerBuilder pathHandler = new PathHandlerBuilder();
+        if(!fullCrud) {
+            pathHandler.withoutFullCrud();
+        }
+
         if(useNamespaces)
             pathHandler = pathHandler.useModuleName();
 
