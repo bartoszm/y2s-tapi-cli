@@ -73,6 +73,9 @@ public class Generator {
     @Option(name = "-fullCrud", usage="If the flag is set to false path are generated for GET operations only. Default true")
     public boolean fullCrud = true;
 
+    @Option(name = "-generate-for-global-class", usage="Generate resource URL only for GlobalClass nodels. Default false")
+    public boolean forGlobalClass = false;
+
     OutputStream out = System.out;
 
     public enum AuthenticationMechanism {
@@ -129,9 +132,15 @@ public class Generator {
                 .version(apiVersion)
                 .format(outputFormat).consumes(contentType).produces(contentType)
                 .host("localhost:1234").elements(map(elementType))
-                .pathHandler(pathHandler)
-                .appendPostProcessor(new PathPrunner("/operations").withType("tapi.common.GlobalClass"))
-                .appendPostProcessor(new CollapseTypes());
+                .pathHandler(pathHandler);
+
+
+        if(forGlobalClass) {
+            generator
+                .appendPostProcessor(new PathPrunner("/operations").withType("tapi.common.GlobalClass"));
+        }
+        generator
+            .appendPostProcessor(new CollapseTypes());
 
         if(AuthenticationMechanism.BASIC.equals(authenticationMechanism)) {
             generator.appendPostProcessor(new AddSecurityDefinitions().withSecurityDefinition("api_sec", new BasicAuthDefinition()));
