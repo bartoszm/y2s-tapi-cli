@@ -6,9 +6,9 @@
 
     <groupId>com.amartus.y2s</groupId>
     <artifactId>yang2swagger-tapi-cli</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <properties>
-        <y2s.version>1.1.10</y2s.version>
+        <y2s.version>1.1.13</y2s.version>
     </properties>
 
     <build>
