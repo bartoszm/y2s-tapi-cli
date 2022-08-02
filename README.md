@@ -9,9 +9,25 @@ Contact:
 
 
 ### How do I get set up? ###
+
+
 First you need to build https://github.com/bartoszm/yang2swagger.
-Then you simply run:
-``mvn clean install``
+
+#### Building yang2swagger
+
+The yang2swagger-tapi-cli depends on the latest stable version of that tool which is (1.1.14).
+To build it locally:
+```bash
+git checkout tags/1.1.14 -b t1.1.14
+mvn clean install 
+```
+
+#### Building yang2swagger-tapi-cli
+
+After yang2swagger is in local maven cache you can build ` yang2swagger-tapi-cli` simply using: 
+```bash
+mvn clean install
+```
 
 ### Command-line Execution ###
 There are two CLI tools ``Generator`` and ``Converter``. ``Generator`` allows for generating Swagger from YANG modules thus it is similar to original 
@@ -110,7 +126,7 @@ You can directly generate swagger with simple hierarch using ``-simplify-hierarc
 #### Usage ####
 You can easily run ```Generator``` from the command-line:
 ```
- java -cp yang2swagger-tapi-cli-1.1-cli.jar com.amartus.y2s.Generator --help
+ java -cp yang2swagger-tapi-cli-1.4.2-cli.jar com.amartus.y2s.Generator --help
  module ...                            : List of YANG module names to generate
                                          in swagger output
  -api-version file                     : Version of api generated - default 1.0
@@ -144,7 +160,7 @@ You can easily run ```Generator``` from the command-line:
 
 For example:
 ```
-java -cp yang2swagger-tapi-cli-1.1-cli.jar com.amartus.y2s.Generator -yang-dir yang -use-namespaces -elements RPC -output test.yaml
+java -cp yang2swagger-tapi-cli-1.4.2-cli.jar com.amartus.y2s.Generator -yang-dir yang -use-namespaces -elements RPC -output test.yaml
 ```
 
 To run ``Converter``:
